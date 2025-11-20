@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { Button } from './components/Button';
+import { WaitlistPage } from './components/WaitlistPage';
 
 // --- Animations ---
 const fadeInUp = {
@@ -64,7 +65,7 @@ const AppleIcon = ({ className }: { className?: string }) => (
 
 // --- Components ---
 
-const Navbar = () => {
+const Navbar = ({ onJoinClick }: { onJoinClick: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -100,7 +101,7 @@ const Navbar = () => {
                   {link.name}
                 </a>
               ))}
-              <Button size="sm" variant="primary">Únete al acceso anticipado</Button>
+              <Button size="sm" variant="primary" onClick={onJoinClick}>Únete al acceso anticipado</Button>
             </div>
           </div>
 
@@ -132,7 +133,7 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="pt-4">
-                <Button className="w-full">Únete al acceso anticipado</Button>
+                <Button className="w-full" onClick={() => { setIsOpen(false); onJoinClick(); }}>Únete al acceso anticipado</Button>
               </div>
             </div>
           </motion.div>
@@ -142,9 +143,9 @@ const Navbar = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ onJoinClick }: { onJoinClick: () => void }) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-b from-[#1a0500] via-[#0A0300] to-[#0A0300]">
       {/* Background Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-contalo-primary/15 rounded-full blur-[120px] -z-10" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-contalo-danger/10 rounded-full blur-[100px] -z-10" />
@@ -169,7 +170,7 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
-            <Button size="lg" className="w-full sm:w-auto">
+            <Button size="lg" className="w-full sm:w-auto" onClick={onJoinClick}>
               Únete al acceso anticipado
             </Button>
             <Button variant="secondary" icon={<Play size={20} />} size="lg" className="w-full sm:w-auto">
@@ -450,7 +451,7 @@ const Solution = () => {
   );
 };
 
-const Features = () => {
+const Features = ({ onJoinClick }: { onJoinClick: () => void }) => {
   const features = [
     { 
       icon: <Zap className="text-yellow-400" size={28} />,
@@ -548,7 +549,7 @@ const Features = () => {
             >
              <div className="relative h-full bg-gradient-to-br from-contalo-primary to-contalo-danger rounded-xl p-8 flex flex-col justify-center items-center text-center border border-transparent hover:scale-[1.02] transition-transform duration-300">
                 <h3 className="text-2xl font-bold text-white mb-4">¿Listo para probarlo?</h3>
-                <Button variant="secondary" size="md" className="w-full">
+                <Button variant="secondary" size="md" className="w-full" onClick={onJoinClick}>
                   Únete ahora
                 </Button>
              </div>
@@ -743,7 +744,7 @@ const Roadmap = () => {
   );
 };
 
-const Waitlist = () => {
+const WaitlistCTA = ({ onJoinClick }: { onJoinClick: () => void }) => {
   return (
     <section className="py-24 bg-gradient-to-r from-contalo-primary/20 to-[#0A0300] relative overflow-hidden">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -752,12 +753,10 @@ const Waitlist = () => {
           Sé de las primeras personas en probar Contalo, recibir novedades y acceder a beneficios especiales.
         </p>
         
-        <div className="bg-[#0A0300]/80 backdrop-blur-md p-8 rounded-3xl border border-white/10 max-w-md mx-auto">
-          <div className="space-y-4">
-            <input type="text" placeholder="Nombre completo" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-contalo-primary transition-colors" />
-            <input type="email" placeholder="Correo electrónico" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-contalo-primary transition-colors" />
-            <Button className="w-full" size="lg">Quiero estar en la lista</Button>
-          </div>
+        <div className="flex justify-center">
+           <Button size="lg" className="w-full sm:w-auto px-12" onClick={onJoinClick}>
+             Quiero estar en la lista
+           </Button>
         </div>
       </div>
     </section>
@@ -841,20 +840,31 @@ const Footer = () => {
 // --- Main App ---
 
 function App() {
+  const [showWaitlist, setShowWaitlist] = useState(false);
+
+  const handleJoinClick = () => {
+    setShowWaitlist(true);
+    window.scrollTo(0, 0);
+  };
+
+  if (showWaitlist) {
+    return <WaitlistPage onBack={() => setShowWaitlist(false)} />;
+  }
+
   return (
     <div className="bg-[#0A0300] min-h-screen font-sans text-white selection:bg-contalo-primary selection:text-white overflow-x-hidden">
-      <Navbar />
+      <Navbar onJoinClick={handleJoinClick} />
       <main>
-        <Hero />
+        <Hero onJoinClick={handleJoinClick} />
         <WhatIsContalo />
         <Problem />
         <Solution />
-        <Features />
+        <Features onJoinClick={handleJoinClick} />
         <TargetAudience />
         <HowItWorks />
         <Pricing />
         <Roadmap />
-        <Waitlist />
+        <WaitlistCTA onJoinClick={handleJoinClick} />
         <FAQ />
       </main>
       <Footer />

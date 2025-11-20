@@ -26,7 +26,9 @@ import {
   EarOff,
   AlertTriangle,
   Repeat,
-  Quote
+  Quote,
+  Brain,
+  Layers
 } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { Button } from './components/Button';
@@ -228,14 +230,6 @@ const WhatIsContalo = () => {
               <p className="leading-relaxed">
                 Contalo es una herramienta impulsada por inteligencia artificial que transforma tus mensajes hablados en textos claros, organizados y con tu propio estilo. 
               </p>
-              <div className="pl-6 border-l-2 border-contalo-primary/30">
-                <p className="italic text-gray-400">
-                  "No solo transcribe: entiende lo que quieres decir, ordena tus ideas y las vuelve fáciles de leer para ti y para quien recibe el mensaje."
-                </p>
-              </div>
-              <p className="leading-relaxed">
-                Pensado para el día a día y para uso profesional, Contalo te ayuda a comunicarte mejor cuando escribir en el celular es lento, incómodo o simplemente no tienes tiempo.
-              </p>
             </div>
           </motion.div>
 
@@ -311,6 +305,121 @@ const WhatIsContalo = () => {
     </section>
   );
 };
+
+const DeepUnderstanding = () => {
+  return (
+    <section className="py-24 relative overflow-hidden bg-[#080402]">
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-contalo-secondary/5 rounded-full blur-[120px] -z-10" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left Visual */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative order-1"
+          >
+            <div className="relative z-10 bg-gradient-to-bl from-[#1a1005] to-[#0A0300] rounded-3xl border border-white/10 p-8 shadow-2xl">
+               {/* Contextual Understanding Visualization */}
+               <div className="flex flex-col gap-6">
+                  {/* Input: Messy Thought */}
+                  <div className="flex items-center gap-4 opacity-60">
+                      <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0">
+                        <Bot size={24} className="text-gray-400" />
+                      </div>
+                      <div className="flex-1 p-4 rounded-xl bg-white/5 border border-white/5 border-dashed">
+                          <div className="flex gap-2 mb-2">
+                             <div className="h-1.5 bg-white/10 rounded w-8" />
+                             <div className="h-1.5 bg-white/10 rounded w-12" />
+                             <div className="h-1.5 bg-white/10 rounded w-6" />
+                          </div>
+                          <div className="flex gap-2">
+                             <div className="h-1.5 bg-white/10 rounded w-16" />
+                             <div className="h-1.5 bg-white/10 rounded w-4" />
+                          </div>
+                      </div>
+                  </div>
+                  
+                  {/* AI Processing Connector */}
+                  <div className="flex justify-center -my-2 relative z-20">
+                    <div className="w-8 h-8 rounded-full bg-contalo-secondary/20 border border-contalo-secondary/30 flex items-center justify-center animate-pulse shadow-[0_0_15px_rgba(253,169,0,0.3)]">
+                      <Sparkles size={14} className="text-contalo-secondary" />
+                    </div>
+                  </div>
+
+                  {/* Output: Structured & Clear */}
+                  <div className="p-6 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-contalo-primary/30 relative overflow-hidden shadow-lg">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-contalo-primary to-contalo-secondary" />
+                      
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-white font-bold text-sm flex items-center gap-2">
+                          <CheckCircle2 size={16} className="text-contalo-primary"/> 
+                          Ideas Claras
+                        </h4>
+                        <span className="text-[10px] uppercase tracking-wider text-contalo-secondary font-semibold bg-contalo-secondary/10 px-2 py-1 rounded">Optimizado</span>
+                      </div>
+
+                      <div className="space-y-3">
+                        <motion.div 
+                          initial={{ width: "60%", opacity: 0.5 }}
+                          whileInView={{ width: "95%", opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.2 }}
+                          className="h-2 bg-gray-300/80 rounded-sm" 
+                        />
+                         <motion.div 
+                          initial={{ width: "40%", opacity: 0.5 }}
+                          whileInView={{ width: "85%", opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.4 }}
+                          className="h-2 bg-gray-300/60 rounded-sm" 
+                        />
+                         <motion.div 
+                          initial={{ width: "50%", opacity: 0.5 }}
+                          whileInView={{ width: "90%", opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.6 }}
+                          className="h-2 bg-gray-300/60 rounded-sm" 
+                        />
+                      </div>
+                  </div>
+               </div>
+               
+               {/* Floating Badges */}
+               <motion.div 
+                 animate={{ y: [0, -5, 0] }}
+                 transition={{ duration: 4, repeat: Infinity }}
+                 className="absolute -right-4 top-1/3 bg-[#0A0300] border border-white/20 px-3 py-1.5 rounded-lg text-xs text-contalo-primary shadow-xl flex items-center gap-1"
+               >
+                 <Layers size={10} /> Estructura
+               </motion.div>
+            </div>
+             {/* Decorative Glow */}
+             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-contalo-secondary/20 rounded-full blur-[60px] -z-10" />
+          </motion.div>
+
+          {/* Right Content */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="order-2"
+          >
+            <div className="pl-6 border-l-4 border-contalo-secondary/50 mb-8">
+              <p className="text-xl md:text-2xl italic text-gray-200 font-light leading-relaxed">
+                "No solo transcribe: entiende lo que quieres decir, ordena tus ideas y las vuelve fáciles de leer para ti y para quien recibe el mensaje."
+              </p>
+            </div>
+            
+            <p className="text-lg text-gray-400 leading-relaxed">
+              Pensado para el día a día y para uso profesional, Contalo te ayuda a comunicarte mejor cuando escribir en el celular es lento, incómodo o simplemente no tienes tiempo.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
 const Problem = () => {
   const problems = [
@@ -671,7 +780,9 @@ const Pricing = () => {
     <section id="pricing" className="py-24 bg-[#050200]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Planes simples, para uso real.</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+            Planes simples, <span className="text-transparent bg-clip-text bg-gradient-to-r from-contalo-primary via-contalo-secondary to-contalo-danger">para uso real.</span>
+          </h2>
           <p className="text-gray-400 text-lg">Empieza gratis. Paga solo si lo usas más.</p>
         </div>
 
@@ -679,10 +790,22 @@ const Pricing = () => {
           {plans.map((plan, i) => (
             <motion.div
               key={i}
-              whileHover={{ y: -10 }}
-              className={`relative p-6 rounded-2xl border ${plan.featured ? 'border-contalo-primary bg-contalo-primary/5' : 'border-white/10 bg-white/5'} flex flex-col justify-between`}
+              animate={plan.featured ? { y: [0, -12, 0] } : undefined}
+              transition={plan.featured ? { duration: 5, repeat: Infinity, ease: "easeInOut" } : undefined}
+              whileHover={!plan.featured ? { y: -10 } : { scale: 1.03 }}
+              className={`relative p-6 rounded-2xl border ${
+                  plan.featured 
+                  ? 'border-contalo-primary bg-contalo-primary/5 group shadow-[0_0_20px_-5px_rgba(252,85,1,0.3)]' 
+                  : 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-contalo-primary/30'
+              } flex flex-col justify-between transition-all duration-300`}
             >
-              {plan.featured && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-contalo-primary text-white text-xs font-bold px-3 py-1 rounded-full">Recomendado</div>}
+              {plan.featured && (
+                  <>
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-contalo-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10">Recomendado</div>
+                    {/* Blur Glow Animation similar to Roadmap section */}
+                    <div className="absolute inset-0 bg-contalo-primary/40 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10" />
+                  </>
+              )}
               <div>
                 <h3 className="text-lg font-bold text-white mb-1">{plan.name}</h3>
                 <div className="flex items-baseline gap-1 mb-4">
@@ -857,6 +980,7 @@ function App() {
       <main>
         <Hero onJoinClick={handleJoinClick} />
         <WhatIsContalo />
+        <DeepUnderstanding />
         <Problem />
         <Solution />
         <Features onJoinClick={handleJoinClick} />

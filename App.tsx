@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Mic, 
@@ -77,6 +78,22 @@ const Navbar = ({ onJoinClick }: { onJoinClick: () => void }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      const headerOffset = 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setIsOpen(false);
+  };
+
   const navLinks = [
     { name: 'Qué es', href: '#what-is' },
     { name: 'Problema', href: '#problem' },
@@ -87,7 +104,7 @@ const Navbar = ({ onJoinClick }: { onJoinClick: () => void }) => {
   return (
     <>
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#0A0300]/90 backdrop-blur-lg border-b border-white/5' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-8 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-3">
               <Logo className="h-20 w-auto" />
@@ -99,7 +116,8 @@ const Navbar = ({ onJoinClick }: { onJoinClick: () => void }) => {
                   <a
                     key={link.name}
                     href={link.href}
-                    className="text-gray-300 hover:text-contalo-primary transition-colors px-3 py-2 rounded-md text-sm font-medium"
+                    onClick={(e) => scrollToSection(e, link.href)}
+                    className="text-gray-300 hover:text-contalo-primary transition-colors px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
                   >
                     {link.name}
                   </a>
@@ -117,55 +135,58 @@ const Navbar = ({ onJoinClick }: { onJoinClick: () => void }) => {
         </div>
       </nav>
 
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60]"
-            />
-            
-            {/* Sidebar */}
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-0 right-0 h-full w-[80%] max-w-sm bg-[#0A0300] border-l border-white/10 z-[70] shadow-2xl overflow-y-auto"
-            >
-              <div className="p-6 flex flex-col h-full">
-                <div className="flex justify-end mb-8">
-                  <button onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white p-2">
-                    <X size={28} />
-                  </button>
-                </div>
-                
-                <div className="flex flex-col space-y-6">
-                  {navLinks.map((link) => (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      onClick={() => setIsOpen(false)}
-                      className="text-xl font-medium text-gray-300 hover:text-contalo-primary border-b border-white/5 pb-4"
-                    >
-                      {link.name}
-                    </a>
-                  ))}
-                  <div className="pt-4 mt-auto">
-                    <Button className="w-full" size="lg" onClick={() => { setIsOpen(false); onJoinClick(); }}>
-                      Únete al acceso anticipado
-                    </Button>
+      {createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsOpen(false)}
+                className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60]"
+              />
+              
+              {/* Sidebar */}
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="fixed top-0 right-0 h-full w-[80%] max-w-sm bg-[#0A0300] border-l border-white/10 z-[70] shadow-2xl overflow-y-auto"
+              >
+                <div className="p-6 flex flex-col h-full">
+                  <div className="flex justify-end mb-8">
+                    <button onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white p-2">
+                      <X size={28} />
+                    </button>
+                  </div>
+                  
+                  <div className="flex flex-col space-y-6">
+                    {navLinks.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        onClick={(e) => scrollToSection(e, link.href)}
+                        className="text-xl font-medium text-gray-300 hover:text-contalo-primary border-b border-white/5 pb-4 cursor-pointer"
+                      >
+                        {link.name}
+                      </a>
+                    ))}
+                    <div className="pt-4 mt-auto">
+                      <Button className="w-full" size="lg" onClick={() => { setIsOpen(false); onJoinClick(); }}>
+                        Únete al acceso anticipado
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 };
@@ -177,7 +198,7 @@ const Hero = ({ onJoinClick }: { onJoinClick: () => void }) => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-contalo-primary/15 rounded-full blur-[120px] -z-10" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-contalo-danger/10 rounded-full blur-[100px] -z-10" />
 
-      <div className="max-w-7xl mx-auto px-8 lg:px-8 text-center relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 text-center relative z-10">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -231,7 +252,7 @@ const WhatIsContalo = () => {
     <section id="what-is" className="py-12 md:py-24 relative overflow-hidden bg-[#050200]">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-contalo-primary/30 to-transparent" />
       
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <motion.div
@@ -336,7 +357,7 @@ const DeepUnderstanding = () => {
     <section className="py-12 md:py-24 relative overflow-hidden bg-[#080402]">
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-contalo-secondary/5 rounded-full blur-[120px] -z-10" />
       
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Visual */}
           <motion.div
@@ -477,7 +498,7 @@ const Problem = () => {
 
   return (
     <section id="problem" className="py-12 md:py-24 relative bg-[#0A0300]">
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-sm font-bold tracking-widest text-contalo-danger uppercase mb-3">
             El problema que resolvemos
@@ -557,7 +578,7 @@ const Solution = () => {
 
   return (
     <section className="py-12 md:py-24 bg-[#050200]">
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Hablas natural. <span className="text-contalo-primary">Contalo se encarga.</span></h2>
         </div>
@@ -624,7 +645,7 @@ const Features = ({ onJoinClick }: { onJoinClick: () => void }) => {
       {/* Background Elements */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-contalo-primary/5 rounded-full blur-[120px] -z-10" />
 
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -632,7 +653,7 @@ const Features = ({ onJoinClick }: { onJoinClick: () => void }) => {
           className="mb-16 text-center md:text-left"
         >
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            Funciones pensadas para <span className="text-contalo-primary whitespace-nowrap">cómo hablas y vives.</span>
+            Funciones pensadas para <span className="text-contalo-primary">cómo hablas y vives.</span>
           </h2>
         </motion.div>
 
@@ -707,7 +728,7 @@ const TargetAudience = () => {
 
   return (
     <section className="py-12 md:py-24 bg-[#0A0300] border-y border-white/5 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-8 lg:px-8 text-center mb-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 text-center mb-12">
         <h2 className="text-3xl font-bold text-white">
           ¿Es Contalo para ti? <span className="text-contalo-secondary">Probablemente sí.</span>
         </h2>
@@ -759,7 +780,7 @@ const HowItWorks = () => {
 
   return (
     <section id="how-it-works" className="py-12 md:py-24">
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-16">Así de simple es usar Contalo</h2>
         
         <div className="relative">
@@ -802,7 +823,7 @@ const Pricing = () => {
 
   return (
     <section id="pricing" className="py-12 md:py-24 bg-[#050200]">
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
             Planes simples, <br />
@@ -865,7 +886,7 @@ const Roadmap = () => {
 
   return (
     <section className="py-12 md:py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-12 text-center">
           Lo que viene con <span className="text-contalo-primary">Contalo</span>
         </h2>
@@ -895,7 +916,7 @@ const Roadmap = () => {
 const WaitlistCTA = ({ onJoinClick }: { onJoinClick: () => void }) => {
   return (
     <section className="py-12 md:py-24 bg-gradient-to-r from-contalo-primary/20 to-[#0A0300] relative overflow-hidden">
-      <div className="max-w-3xl mx-auto px-8 lg:px-8 text-center relative z-10">
+      <div className="max-w-3xl mx-auto px-6 md:px-12 text-center relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Únete a la lista anticipada</h2>
         <p className="text-gray-300 mb-8 text-lg">
           Sé de las primeras personas en probar Contalo, recibir novedades y acceder a beneficios especiales.
@@ -923,7 +944,7 @@ const FAQ = () => {
 
   return (
     <section id="faq" className="py-12 md:py-24 bg-black">
-      <div className="max-w-3xl mx-auto px-8 lg:px-8">
+      <div className="max-w-3xl mx-auto px-6 md:px-12">
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-12 text-center">Preguntas Frecuentes</h2>
         <div className="space-y-4">
           {faqs.map((faq, i) => (
@@ -959,10 +980,10 @@ const FAQ = () => {
 const Footer = () => {
   return (
     <footer className="border-t border-white/10 bg-[#050200] pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-8 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-center mb-12">
           <div className="flex flex-col items-center md:items-start gap-4 mb-6 md:mb-0">
-            <Logo className="h-72 w-auto" />
+            <Logo className="h-24 w-auto" />
             <p className="text-gray-400 text-sm max-w-xs text-center md:text-left">
               Contalo — IA que escribe lo que quieres decir, a tu manera, a un toque.
             </p>

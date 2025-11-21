@@ -35,6 +35,7 @@ Contalo is a React-based landing page application for an AI-powered voice-to-tex
 ### Key Configuration
 - **Dev Server Port**: 5000 (configured for Replit)
 - **Host**: 0.0.0.0 (allows external access)
+- **Allowed Hosts**: true (required for Replit proxy to work)
 - **HMR Port**: 443 (configured for Replit proxy)
 
 ## Environment Variables
@@ -50,10 +51,12 @@ The app will work without the API key for the static landing page display.
 - Installed Node.js 20 module
 - Updated Vite configuration:
   - Changed port from 3000 to 5000 (Replit requirement)
+  - Added `allowedHosts: true` to allow Replit proxy requests
   - Added HMR client port configuration (443 for Replit proxy)
   - Kept host as 0.0.0.0 for external access
 - Configured workflow "Start Contalo Frontend" to run `npm run dev`
 - Installed all npm dependencies
+- Configured deployment for static hosting (builds to `dist` folder)
 - Created project documentation
 
 ## Development
